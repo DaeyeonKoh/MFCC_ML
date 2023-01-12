@@ -1,0 +1,77 @@
+clear all;
+
+%% MFCC extracted by 20 filter banks
+TRAIN20 = readmatrix('ML20dataset_TRAIN.xlsx');
+TEST20 = readmatrix('ML20dataset_TEST.xlsx');
+
+% SVM
+numBanks_20=20;
+XTrain = TRAIN20(:,2:numBanks_20+1);
+YTrain = TRAIN20(:,1);
+XTest = TEST20(:,2:numBanks_20+1);
+YTest = TEST20(:,1);
+
+t20_3 = templateSVM('BoxConstraint',100,'IterationLimit',2e5,'Solver','ISDA','KernelFunction','polynomial','PolynomialOrder',3);
+svmMd20_3 = fitcecoc(XTrain,YTrain,'Learners',t20_3);
+YsvmPred20_3 = predict(svmMd20_3,XTest);
+SVMaccuracy20_3 = sum(YsvmPred20_3 == YTest)/numel(YTest);
+[Label20_3,scores20_3] = predict(svmMd20_3,XTest);
+
+t20_rbf = templateSVM('BoxConstraint',100,'IterationLimit',2e5,'Solver','ISDA','KernelFunction','rbf');
+svmMd20_rbf = fitcecoc(XTrain,YTrain,'Learners',t20_rbf);
+YsvmPred20_rbf = predict(svmMd20_rbf,XTest);
+SVMaccuracy20_rbf = sum(YsvmPred20_rbf == YTest)/numel(YTest);
+[Label20_rbf,scores20_rbf] = predict(svmMd20_rbf,XTest);
+
+
+% KNN
+knnMd20_3 = fitcknn(XTrain,YTrain,'NumNeighbors',3);
+knnMd20_5 = fitcknn(XTrain,YTrain,'NumNeighbors',5);
+knnMd20_7 = fitcknn(XTrain,YTrain,'NumNeighbors',7);
+
+[Label20_knn3,scores20_knn3] = predict(knnMd20_3,XTest);
+[Label20_knn5,scores20_knn5] = predict(knnMd20_5,XTest);
+[Label20_knn7,scores20_knn7] = predict(knnMd20_7,XTest);
+
+KNNaccuracy20_3 = sum(Label20_knn3 == YTest)/numel(YTest);
+KNNaccuracy20_5 = sum(Label20_knn5 == YTest)/numel(YTest);
+KNNaccuracy20_7 = sum(Label20_knn7 == YTest)/numel(YTest);
+
+
+
+%% MFCC extracted by 40 filter banks
+TRAIN40 = readmatrix('ML40dataset_TRAIN.xlsx');
+TEST40 = readmatrix('ML40dataset_TEST.xlsx');
+
+% SVM
+numBanks_40=40;
+XTrain = TRAIN40(:,2:numBanks_40+1);
+YTrain = TRAIN40(:,1);
+XTest = TEST40(:,2:numBanks_40+1);
+YTest = TEST40(:,1);
+
+t40_3 = templateSVM('BoxConstraint',100,'IterationLimit',2e5,'Solver','ISDA','KernelFunction','polynomial','PolynomialOrder',3);
+svmMd40_3 = fitcecoc(XTrain,YTrain,'Learners',t40_3);
+YsvmPred40_3 = predict(svmMd40_3,XTest);
+SVMaccuracy40_3 = sum(YsvmPred40_3 == YTest)/numel(YTest);
+[Label40_3,scores40_3] = predict(svmMd40_3,XTest);
+
+t40_rbf = templateSVM('BoxConstraint',100,'IterationLimit',2e5,'Solver','ISDA','KernelFunction','rbf');
+svmMd40_rbf = fitcecoc(XTrain,YTrain,'Learners',t40_rbf);
+YsvmPred40_rbf = predict(svmMd40_rbf,XTest);
+SVMaccuracy40_rbf = sum(YsvmPred40_rbf == YTest)/numel(YTest);
+[Label40_rbf,scores40_rbf] = predict(svmMd40_rbf,XTest);
+
+% KNN
+knnMd40_3 = fitcknn(XTrain,YTrain,'NumNeighbors',3);
+knnMd40_5 = fitcknn(XTrain,YTrain,'NumNeighbors',5);
+knnMd40_7 = fitcknn(XTrain,YTrain,'NumNeighbors',7);
+
+[Label40_knn3,scores40_knn3] = predict(knnMd40_3,XTest);
+[Label40_knn5,scores40_knn5] = predict(knnMd40_7,XTest);
+[Label40_knn7,scores40_knn7] = predict(knnMd40_7,XTest);
+
+KNNaccuracy40_3 = sum(Label40_knn3 == YTest)/numel(YTest);
+KNNaccuracy40_5 = sum(Label40_knn5 == YTest)/numel(YTest);
+KNNaccuracy40_7 = sum(Label40_knn7 == YTest)/numel(YTest);
+
